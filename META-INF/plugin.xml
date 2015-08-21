@@ -1,0 +1,46 @@
+<idea-plugin version="2">
+  <id>com.microsoft.tooling.msservices.android</id>
+  <name>Microsoft Cloud Toolkit for Android</name>
+  <version>1.0</version>
+  <vendor email="xplatjava@microsoft.com" url="http://www.microsoft.com">Microsoft</vendor>
+
+  <description><![CDATA[
+    Microsoft Cloud Toolkit for Android for IntelliJ and Android Studio.
+    ]]></description>
+
+  <change-notes><![CDATA[
+    ]]>
+  </change-notes>
+
+  <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Build+Number+Ranges for description -->
+  <idea-version since-build="131"/>
+
+  <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+       on how to target different products -->
+  <!-- uncomment to enable plugin in all products
+  <depends>com.intellij.modules.lang</depends>
+  -->
+  <depends optional="true">org.jetbrains.android</depends>
+  <depends>com.microsoft.tooling.msservices.intellij.commonlib</depends>
+
+  <extensions defaultExtensionNs="org.jetbrains.android">
+    <wizardParameterFactory implementation="com.microsoft.intellij.helpers.activityConfiguration.azureCustomWizardParameter.AzureWizardParameterFactory"/>
+    <wizardParameterFactory implementation="com.microsoft.intellij.helpers.activityConfiguration.office365CustomWizardParameter.Office365WizardParameterFactory"/>
+  </extensions>
+
+  <application-components>
+    <!-- Add your application components here -->
+  </application-components>
+
+  <project-components>
+    <component>
+      <implementation-class>com.microsoft.intellij.components.MSToolsProject</implementation-class>
+      <loadForDefaultProject/>
+    </component>
+  </project-components>
+
+  <actions>
+    <!-- Add your actions here -->
+  </actions>
+
+</idea-plugin>

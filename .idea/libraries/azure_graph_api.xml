@@ -1,0 +1,15 @@
+<component name="libraryTable">
+  <library name="azure-graph-api">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/azure-graph-api/directory-services-0.11.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/azure-graph-api/odata-engine-core-0.11.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/azure-graph-api/odata-engine-jvm-impl-0.11.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/azure-graph-api/directory-services-0.11.1-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/azure-graph-api/odata-engine-core-0.11.1-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/azure-graph-api/odata-engine-jvm-impl-0.11.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

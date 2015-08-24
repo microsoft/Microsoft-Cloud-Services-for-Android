@@ -39,3 +39,6 @@ com_crashlytics_export_strings.xml
 
 # Ignore OSX internal file
 .DS_Store
+
+# Ignore plugin jar
+ms-cloud-toolkit-for-android.jar

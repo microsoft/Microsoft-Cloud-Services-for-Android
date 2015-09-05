@@ -41,4 +41,4 @@ com_crashlytics_export_strings.xml
 .DS_Store
 
 # Ignore plugin jar
-ms-cloud-toolkit-for-android.jar
+ms-cloud-services-for-android.jar

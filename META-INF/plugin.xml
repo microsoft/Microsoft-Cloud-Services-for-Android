@@ -1,11 +1,11 @@
 <idea-plugin version="2">
   <id>com.microsoft.tooling.msservices.android</id>
-  <name>Microsoft Cloud Toolkit for Android</name>
+  <name>Microsoft Cloud Services for Android</name>
   <version>1.0</version>
   <vendor email="xplatjava@microsoft.com" url="http://www.microsoft.com">Microsoft</vendor>
 
   <description><![CDATA[
-    Microsoft Cloud Toolkit for Android for IntelliJ and Android Studio.
+    Microsoft Cloud Services for Android for IntelliJ and Android Studio.
     ]]></description>
 
   <change-notes><![CDATA[
@@ -21,7 +21,7 @@
   <depends>com.intellij.modules.lang</depends>
   -->
   <depends optional="true">org.jetbrains.android</depends>
-  <depends>com.microsoft.tooling.msservices.intellij.commonlib</depends>
+  <depends>com.microsoft.tooling.msservices.intellij.azure-services-explorer</depends>
 
   <extensions defaultExtensionNs="org.jetbrains.android">
     <wizardParameterFactory implementation="com.microsoft.intellij.helpers.activityConfiguration.azureCustomWizardParameter.AzureWizardParameterFactory"/>

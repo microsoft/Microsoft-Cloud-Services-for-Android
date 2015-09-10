@@ -10,5 +10,7 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" scope="PROVIDED" name="android" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="azure-graph-api" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="common-lib" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="azure-services-explorer-plugin" level="project" />
   </component>
 </module>

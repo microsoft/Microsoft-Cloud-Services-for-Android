@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="azure-services-explorer-plugin">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/azure-services-explorer-plugin.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

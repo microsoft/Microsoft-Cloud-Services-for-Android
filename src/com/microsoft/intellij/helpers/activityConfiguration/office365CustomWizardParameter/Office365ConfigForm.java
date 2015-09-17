@@ -71,7 +71,7 @@ public class Office365ConfigForm extends DialogWrapper {
     private JButton btnSignOut;
     private JEditorPane editorSummary;
 
-    public Office365ConfigForm(Project project, boolean isListServices, boolean isFileServices, boolean isOutlookServices) {
+    public Office365ConfigForm(final Project project, boolean isListServices, boolean isFileServices, boolean isOutlookServices) {
         super(project, true);
 
         setTitle("Configure Office365 Services");
@@ -93,12 +93,11 @@ public class Office365ConfigForm extends DialogWrapper {
         btnAddApp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                CreateOffice365ApplicationForm form = new CreateOffice365ApplicationForm();
+                CreateOffice365ApplicationForm form = new CreateOffice365ApplicationForm(project);
                 form.setModal(true);
-                UIHelperImpl.packAndCenterJDialog(form);
-                form.setVisible(true);
+                form.showAndGet();
 
-                if (form.getDialogResult() == CreateOffice365ApplicationForm.DialogResult.OK) {
+                if (form.isOK()) {
                     refreshApps(form.getApplication().getappId());
                 }
             }
@@ -504,11 +503,10 @@ public class Office365ConfigForm extends DialogWrapper {
             public void actionPerformed(ActionEvent e) {
                 // this is not exactly intuitive but when you click the button on the table cell
                 // this is the method that gets called; so we pop up the permissions form here
-                PermissionsEditorForm permissionsEditorForm = new PermissionsEditorForm(service.getName(), permissionSet);
-                UIHelperImpl.packAndCenterJDialog(permissionsEditorForm);
-                permissionsEditorForm.setVisible(true);
+                PermissionsEditorForm permissionsEditorForm = new PermissionsEditorForm(service.getName(), permissionSet, null);
+                permissionsEditorForm.showAndGet();
 
-                if (permissionsEditorForm.getDialogResult() == PermissionsEditorForm.DialogResult.OK) {
+                if (permissionsEditorForm.isOK()) {
                     // update our permissions
                     permissionSet = permissionsEditorForm.getPermissions();
                     tblAppPermissions.getModel().setValueAt(permissionSet, currentRow, currentCol);

@@ -63,7 +63,7 @@ public class MobileServiceConfigForm extends DialogWrapper {
 
     private MobileService selectedMobileService;
 
-    public MobileServiceConfigForm(Project project) {
+    public MobileServiceConfigForm(final Project project) {
         super(project, true);
         setTitle("Select an Azure Mobile Service");
 
@@ -112,7 +112,7 @@ public class MobileServiceConfigForm extends DialogWrapper {
         buttonAddService.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                CreateMobileServiceForm form = new CreateMobileServiceForm();
+                CreateMobileServiceForm form = new CreateMobileServiceForm(project);
                 form.setServiceCreated(new Runnable() {
                     @Override
                     public void run() {
@@ -126,8 +126,7 @@ public class MobileServiceConfigForm extends DialogWrapper {
                 });
 
                 form.setModal(true);
-                UIHelperImpl.packAndCenterJDialog(form);
-                form.setVisible(true);
+                form.show();
             }
         });
 
@@ -139,8 +138,7 @@ public class MobileServiceConfigForm extends DialogWrapper {
 
     private void editSubscriptions() {
         ManageSubscriptionForm form = new ManageSubscriptionForm(project);
-        UIHelperImpl.packAndCenterJDialog(form);
-        form.setVisible(true);
+        form.show();
 
         try {
             List<Subscription> subscriptionList = AzureManagerImpl.getManager().getSubscriptionList();

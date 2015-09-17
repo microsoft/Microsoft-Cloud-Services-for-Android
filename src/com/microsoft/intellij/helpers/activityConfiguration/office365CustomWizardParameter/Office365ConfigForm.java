@@ -33,13 +33,13 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.ui.ListCellRendererWrapper;
 import com.intellij.ui.components.JBLabel;
+import com.intellij.ui.table.JBTable;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.microsoft.directoryservices.Application;
 import com.microsoft.intellij.forms.CreateOffice365ApplicationForm;
 import com.microsoft.intellij.forms.PermissionsEditorForm;
 import com.microsoft.intellij.helpers.ReadOnlyCellTableModel;
-import com.microsoft.intellij.helpers.UIHelperImpl;
 import com.microsoft.intellij.helpers.graph.ServicePermissionEntry;
 import com.microsoft.intellij.helpers.o365.Office365Manager;
 import com.microsoft.intellij.helpers.o365.Office365ManagerImpl;
@@ -93,13 +93,16 @@ public class Office365ConfigForm extends DialogWrapper {
         btnAddApp.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                CreateOffice365ApplicationForm form = new CreateOffice365ApplicationForm(project);
-                form.setModal(true);
-                form.showAndGet();
+                final CreateOffice365ApplicationForm form = new CreateOffice365ApplicationForm(project);
+                form.setOnRegister(new Runnable() {
+                    @Override
+                    public void run() {
+                        refreshApps(form.getApplication().getappId());
+                    }
+                });
 
-                if (form.isOK()) {
-                    refreshApps(form.getApplication().getappId());
-                }
+                form.show();
+
             }
         });
 
@@ -333,6 +336,10 @@ public class Office365ConfigForm extends DialogWrapper {
         });
     }
 
+    private void createUIComponents() {
+        tblAppPermissions = new JBTable();
+    }
+
     private class StringComboBoxItemRenderer extends ListCellRendererWrapper<String> {
         @Override
         public void customize(JList jList, String s, int i, boolean b, boolean b2) {
@@ -503,15 +510,20 @@ public class Office365ConfigForm extends DialogWrapper {
             public void actionPerformed(ActionEvent e) {
                 // this is not exactly intuitive but when you click the button on the table cell
                 // this is the method that gets called; so we pop up the permissions form here
-                PermissionsEditorForm permissionsEditorForm = new PermissionsEditorForm(service.getName(), permissionSet, null);
-                permissionsEditorForm.showAndGet();
+                final PermissionsEditorForm permissionsEditorForm = new PermissionsEditorForm(service.getName(), permissionSet, null);
 
-                if (permissionsEditorForm.isOK()) {
-                    // update our permissions
-                    permissionSet = permissionsEditorForm.getPermissions();
-                    tblAppPermissions.getModel().setValueAt(permissionSet, currentRow, currentCol);
-                }
-                fireEditingStopped();
+                permissionsEditorForm.setOnOK(new Runnable() {
+                    @Override
+                    public void run() {
+                        // update our permissions
+                        permissionSet = permissionsEditorForm.getPermissions();
+                        tblAppPermissions.getModel().setValueAt(permissionSet, currentRow, currentCol);
+                        fireEditingStopped();
+                    }
+                });
+
+                permissionsEditorForm.show();
+
             }
         }
     }

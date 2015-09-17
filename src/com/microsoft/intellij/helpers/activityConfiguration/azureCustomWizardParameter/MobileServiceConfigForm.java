@@ -29,10 +29,10 @@ import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
+import com.intellij.ui.table.JBTable;
 import com.microsoft.intellij.forms.CreateMobileServiceForm;
 import com.microsoft.intellij.forms.ManageSubscriptionForm;
 import com.microsoft.intellij.helpers.ReadOnlyCellTableModel;
-import com.microsoft.intellij.helpers.UIHelperImpl;
 import com.microsoft.tooling.msservices.components.DefaultLoader;
 import com.microsoft.tooling.msservices.helpers.azure.AzureCmdException;
 import com.microsoft.tooling.msservices.helpers.azure.AzureManagerImpl;
@@ -125,7 +125,6 @@ public class MobileServiceConfigForm extends DialogWrapper {
                     }
                 });
 
-                form.setModal(true);
                 form.show();
             }
         });
@@ -325,5 +324,9 @@ public class MobileServiceConfigForm extends DialogWrapper {
         return (mobileServices.getSelectedRows().length == 0)
                 ? new ValidationInfo("Select a Mobile Service", mobileServices)
                 : super.doValidate();
+    }
+
+    private void createUIComponents() {
+        mobileServices = new JBTable();
     }
 }

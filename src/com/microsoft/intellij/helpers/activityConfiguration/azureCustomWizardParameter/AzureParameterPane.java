@@ -147,7 +147,9 @@ public class AzureParameterPane extends JPanel {
                         updateDocument();
                     }
                 } catch (Throwable e) {
-                    DefaultLoader.getUIHelper().showException("Error loading notification hubs configuration", e);
+                    DefaultLoader.getUIHelper().showException("An error occurred while attempting to load notification " +
+                                    "hubs configuration", e,
+                            "Microsoft Cloud Services For Android - Error Loading NH Configuration", false, true);
                 }
             }
         });

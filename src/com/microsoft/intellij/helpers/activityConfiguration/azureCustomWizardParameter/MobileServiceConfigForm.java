@@ -29,10 +29,10 @@ import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.ui.ValidationInfo;
+import com.intellij.ui.table.JBTable;
 import com.microsoft.intellij.forms.CreateMobileServiceForm;
 import com.microsoft.intellij.forms.ManageSubscriptionForm;
 import com.microsoft.intellij.helpers.ReadOnlyCellTableModel;
-import com.microsoft.intellij.helpers.UIHelperImpl;
 import com.microsoft.tooling.msservices.components.DefaultLoader;
 import com.microsoft.tooling.msservices.helpers.azure.AzureCmdException;
 import com.microsoft.tooling.msservices.helpers.azure.AzureManagerImpl;
@@ -63,7 +63,7 @@ public class MobileServiceConfigForm extends DialogWrapper {
 
     private MobileService selectedMobileService;
 
-    public MobileServiceConfigForm(Project project) {
+    public MobileServiceConfigForm(final Project project) {
         super(project, true);
         setTitle("Select an Azure Mobile Service");
 
@@ -112,7 +112,7 @@ public class MobileServiceConfigForm extends DialogWrapper {
         buttonAddService.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent actionEvent) {
-                CreateMobileServiceForm form = new CreateMobileServiceForm();
+                CreateMobileServiceForm form = new CreateMobileServiceForm(project);
                 form.setServiceCreated(new Runnable() {
                     @Override
                     public void run() {
@@ -125,9 +125,7 @@ public class MobileServiceConfigForm extends DialogWrapper {
                     }
                 });
 
-                form.setModal(true);
-                UIHelperImpl.packAndCenterJDialog(form);
-                form.setVisible(true);
+                form.show();
             }
         });
 
@@ -139,8 +137,7 @@ public class MobileServiceConfigForm extends DialogWrapper {
 
     private void editSubscriptions() {
         ManageSubscriptionForm form = new ManageSubscriptionForm(project);
-        UIHelperImpl.packAndCenterJDialog(form);
-        form.setVisible(true);
+        form.show();
 
         try {
             List<Subscription> subscriptionList = AzureManagerImpl.getManager().getSubscriptionList();
@@ -327,5 +324,9 @@ public class MobileServiceConfigForm extends DialogWrapper {
         return (mobileServices.getSelectedRows().length == 0)
                 ? new ValidationInfo("Select a Mobile Service", mobileServices)
                 : super.doValidate();
+    }
+
+    private void createUIComponents() {
+        mobileServices = new JBTable();
     }
 }

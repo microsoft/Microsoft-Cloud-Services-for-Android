@@ -52,7 +52,7 @@
                   <forms/>
                 </constraints>
                 <properties>
-                  <icon value="com/microsoft/intellij/icons/logout.png"/>
+                  <icon value="com/microsoft/intellij/icons/settings.png"/>
                   <text value=""/>
                   <toolTipText value="Sign out"/>
                 </properties>
@@ -113,7 +113,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="de58e" class="javax.swing.JTable" binding="tblAppPermissions">
+                  <component id="de58e" class="javax.swing.JTable" binding="tblAppPermissions" custom-create="true">
                     <constraints/>
                     <properties/>
                   </component>

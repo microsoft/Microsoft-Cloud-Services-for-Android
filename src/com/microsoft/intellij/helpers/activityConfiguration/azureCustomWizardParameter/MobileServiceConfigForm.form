@@ -6,7 +6,7 @@
     <colspec value="left:4dlu:noGrow"/>
     <colspec value="fill:m:grow"/>
     <constraints>
-      <xy x="-3" y="20" width="652" height="305"/>
+      <xy x="-3" y="20" width="687" height="305"/>
     </constraints>
     <properties/>
     <border type="none"/>
@@ -71,7 +71,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="de58e" class="javax.swing.JTable" binding="mobileServices">
+              <component id="de58e" class="javax.swing.JTable" binding="mobileServices" custom-create="true">
                 <constraints/>
                 <properties/>
               </component>

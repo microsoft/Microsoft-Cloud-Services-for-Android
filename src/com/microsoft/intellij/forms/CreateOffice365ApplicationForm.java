@@ -26,52 +26,49 @@ import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.DialogWrapper;
+import com.intellij.openapi.ui.ValidationInfo;
 import com.microsoft.directoryservices.Application;
 import com.microsoft.intellij.helpers.LinkListener;
 import com.microsoft.intellij.helpers.o365.Office365ManagerImpl;
 import com.microsoft.tooling.msservices.components.DefaultLoader;
 import com.microsoft.tooling.msservices.helpers.StringHelper;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-public class CreateOffice365ApplicationForm extends JDialog {
+public class CreateOffice365ApplicationForm extends DialogWrapper {
     private JPanel mainPanel;
     private JTextField nameTextField;
-    private JButton btnCloseButton;
     private JLabel lblPrivacy;
-    private JButton btnCreate;
     private JCheckBox multiTenantCheckBox;
     private JTextField redirectURITextField;
-    private DialogResult dialogResult;
     private Application application;
-
-    public DialogResult getDialogResult() {
-        return dialogResult;
-    }
+    private Project project;
+    private Runnable onRegister;
 
     public Application getApplication() {
         return application;
     }
-
     private void setApplication(Application application) {
         this.application = application;
     }
 
-    public enum DialogResult {
-        OK,
-        CANCEL
+    @Nullable
+    @Override
+    protected JComponent createCenterPanel() {
+        return mainPanel;
     }
 
-    public CreateOffice365ApplicationForm() {
-        final JDialog form = this;
+    public CreateOffice365ApplicationForm(Project project) {
+        super(project, true);
 
-        this.setContentPane(mainPanel);
-        this.setResizable(false);
+        this.project = project;
+
         this.setModal(true);
         this.setTitle("Create Office 365 Application");
 
@@ -84,99 +81,99 @@ public class CreateOffice365ApplicationForm extends JDialog {
 
         lblPrivacy.addMouseListener(new LinkListener("http://msdn.microsoft.com/en-us/vstudio/dn425032.aspx"));
 
-        btnCloseButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                dialogResult = DialogResult.CANCEL;
-                form.setVisible(false);
-                form.dispose();
+        init();
+    }
+
+
+    @Nullable
+    @Override
+    protected ValidationInfo doValidate() {
+
+        final String name = nameTextField.getText();
+        final String replyURL = redirectURITextField.getText();
+
+        if (StringHelper.isNullOrWhiteSpace(name)) {
+            return new ValidationInfo("The application name must not be empty.", nameTextField);
+        } else if (name.length() > 64) {
+            return new ValidationInfo("The application name cannot be more than 64 characters long.", nameTextField);
+        }
+
+        if (StringHelper.isNullOrWhiteSpace(replyURL)) {
+            return new ValidationInfo("The redirect URI must not be empty.", redirectURITextField);
+        } else {
+            try {
+                new URI(replyURL);
+            } catch (URISyntaxException e) {
+                return new ValidationInfo("The redirect URI must be a valid URI.", redirectURITextField);
             }
-        });
+        }
 
-        btnCreate.addActionListener(new ActionListener() {
+        return null;
+    }
+
+    @Override
+    protected void doOKAction() {
+
+        final CreateOffice365ApplicationForm form = this;
+
+        DefaultLoader.getIdeHelper().runInBackground(project, "Registering Office 365 Application", false, true, "Registering Office 365 Application...", new Runnable() {
             @Override
-            public void actionPerformed(ActionEvent actionEvent) {
-                ApplicationManager.getApplication().invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            final String name = nameTextField.getText();
-                            final String replyURL = redirectURITextField.getText();
+            public void run() {
+                try {
+                    final String name = nameTextField.getText();
+                    final String replyURL = redirectURITextField.getText();
 
-                            String error = "";
+                    Application application = new Application();
+                    application.setdisplayName(name);
+                    application.setreplyUrls(Lists.newArrayList(replyURL));
+                    application.sethomepage(replyURL);
+                    application.setavailableToOtherTenants(multiTenantCheckBox.isSelected());
+                    application.setpublicClient(true);
 
-                            if (StringHelper.isNullOrWhiteSpace(name)) {
-                                error += "The application name must not be empty.\n";
-                            } else if (name.length() > 64) {
-                                error += "The application name cannot be more than 64 characters long.\n";
-                            }
-
-                            if (StringHelper.isNullOrWhiteSpace(replyURL)) {
-                                error += "The redirect URI must not be empty.\n";
-                            } else {
-                                try {
-                                    new URI(replyURL);
-                                } catch (URISyntaxException e) {
-                                    error += "The redirect URI must be a valid URI.\n";
+                    Futures.addCallback(Office365ManagerImpl.getManager().registerApplication(application),
+                            new FutureCallback<Application>() {
+                                @Override
+                                public void onSuccess(final Application application) {
+                                    ApplicationManager.getApplication().invokeAndWait(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            setApplication(application);
+                                            if(onRegister != null) {
+                                                onRegister.run();
+                                            }
+                                        }
+                                    }, ModalityState.any());
                                 }
-                            }
 
-                            if (!error.isEmpty()) {
-                                JOptionPane.showMessageDialog(form, error, "Error creating the application",
-                                        JOptionPane.ERROR_MESSAGE);
-                                return;
-                            }
-
-                            form.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
-                            Application application = new Application();
-                            application.setdisplayName(name);
-                            application.setreplyUrls(Lists.newArrayList(replyURL));
-                            application.sethomepage(replyURL);
-                            application.setavailableToOtherTenants(multiTenantCheckBox.isSelected());
-                            application.setpublicClient(true);
-
-                            Futures.addCallback(Office365ManagerImpl.getManager().registerApplication(application),
-                                    new FutureCallback<Application>() {
+                                @Override
+                                public void onFailure(final Throwable throwable) {
+                                    ApplicationManager.getApplication().invokeAndWait(new Runnable() {
                                         @Override
-                                        public void onSuccess(final Application application) {
-                                            ApplicationManager.getApplication().invokeAndWait(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    setApplication(application);
-                                                    dialogResult = DialogResult.OK;
-                                                    form.setCursor(Cursor.getDefaultCursor());
-                                                    form.dispose();
-                                                }
-                                            }, ModalityState.any());
+                                        public void run() {
+                                            DefaultLoader.getUIHelper().showException("An error occurred while trying to register the Office 365 application.",
+                                                    throwable,
+                                                    "Error Registering Office 365 Application",
+                                                    false,
+                                                    true);
                                         }
-
-                                        @Override
-                                        public void onFailure(final Throwable throwable) {
-                                            ApplicationManager.getApplication().invokeAndWait(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    form.setCursor(Cursor.getDefaultCursor());
-                                                    DefaultLoader.getUIHelper().showException("An error occurred while trying to register the Office 365 application.",
-                                                            throwable,
-                                                            "Error Registering Office 365 Application",
-                                                            false,
-                                                            true);
-                                                }
-                                            }, ModalityState.any());
-                                        }
-                                    });
-                        } catch (Throwable e) {
-                            form.setCursor(Cursor.getDefaultCursor());
-                            DefaultLoader.getUIHelper().showException("An error occurred while trying to register the Office 365 application.",
-                                    e,
-                                    "Error Registering Office 365 Application",
-                                    false,
-                                    true);
-                        }
-                    }
-                });
+                                    }, ModalityState.any());
+                                }
+                            });
+                } catch (Throwable e) {
+                    form.getWindow().setCursor(Cursor.getDefaultCursor());
+                    DefaultLoader.getUIHelper().showException("An error occurred while trying to register the Office 365 application.",
+                            e,
+                            "Error Registering Office 365 Application",
+                            false,
+                            true);
+                }
             }
         });
+
+        form.close(DialogWrapper.OK_EXIT_CODE, true);
+    }
+
+    public void setOnRegister(Runnable onRegister) {
+        this.onRegister = onRegister;
     }
 }

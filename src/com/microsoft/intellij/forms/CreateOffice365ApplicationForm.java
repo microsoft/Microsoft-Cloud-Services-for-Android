@@ -54,6 +54,7 @@ public class CreateOffice365ApplicationForm extends DialogWrapper {
     public Application getApplication() {
         return application;
     }
+
     private void setApplication(Application application) {
         this.application = application;
     }
@@ -138,7 +139,7 @@ public class CreateOffice365ApplicationForm extends DialogWrapper {
                                         @Override
                                         public void run() {
                                             setApplication(application);
-                                            if(onRegister != null) {
+                                            if (onRegister != null) {
                                                 onRegister.run();
                                             }
                                         }
@@ -150,9 +151,9 @@ public class CreateOffice365ApplicationForm extends DialogWrapper {
                                     ApplicationManager.getApplication().invokeAndWait(new Runnable() {
                                         @Override
                                         public void run() {
-                                            DefaultLoader.getUIHelper().showException("An error occurred while trying to register the Office 365 application.",
+                                            DefaultLoader.getUIHelper().showException("An error occurred while attempting to register the Office 365 application.",
                                                     throwable,
-                                                    "Error Registering Office 365 Application",
+                                                    "Microsoft Cloud Services For Android - Error Registering Office 365 Application",
                                                     false,
                                                     true);
                                         }
@@ -161,9 +162,9 @@ public class CreateOffice365ApplicationForm extends DialogWrapper {
                             });
                 } catch (Throwable e) {
                     form.getWindow().setCursor(Cursor.getDefaultCursor());
-                    DefaultLoader.getUIHelper().showException("An error occurred while trying to register the Office 365 application.",
+                    DefaultLoader.getUIHelper().showException("An error occurred while attempting to register the Office 365 application.",
                             e,
-                            "Error Registering Office 365 Application",
+                            "Microsoft Cloud Services For Android - Error Registering Office 365 Application",
                             false,
                             true);
                 }

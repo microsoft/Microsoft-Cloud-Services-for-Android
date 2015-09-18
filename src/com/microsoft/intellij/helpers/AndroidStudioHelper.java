@@ -111,7 +111,9 @@ public class AndroidStudioHelper {
                     Thread.sleep(3000);
 
                     if (!new File(templatePath + mobileServicesTemplateName).exists() || errorCode != 0)
-                        DefaultLoader.getUIHelper().showException("Error copying template files. Please refer to documentation to copy manually.", new Exception());
+                        DefaultLoader.getUIHelper().showException("An error occurred while attempting to copy template files. " +
+                                        "Please refer to documentation to copy manually.", null,
+                                "Microsoft Cloud Services For Android - Error Copying Template Files", false, false);
                 }
             } else if (System.getProperty("os.name").toLowerCase().startsWith("mac")) {
 
@@ -324,10 +326,13 @@ public class AndroidStudioHelper {
                 String streamContent = sb.toString();
 
                 if (isError && !streamContent.isEmpty())
-                    DefaultLoader.getUIHelper().showException("Error copying Microsoft Services templates", new AzureCmdException("Error copying Microsoft Services templates", "Error: " + streamContent));
+                    DefaultLoader.getUIHelper().showException("An error occurred while attempting to copy Microsoft Services templates",
+                            new AzureCmdException("Error copying Microsoft Services templates", "Error: " + streamContent),
+                            "Microsoft Cloud Services For Android - Error Copying Templates", false, true);
 
             } catch (IOException ioe) {
-                DefaultLoader.getUIHelper().showException("Error copying Microsoft Services templates", ioe);
+                DefaultLoader.getUIHelper().showException("An error occurred while attempting to copy Microsoft Services templates", ioe,
+                        "Microsoft Cloud Services For Android - Error Copying Templates", false, true);
             }
         }
     }

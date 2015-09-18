@@ -288,7 +288,8 @@ public class MobileServiceConfigForm extends DialogWrapper {
                     }
 
                 } catch (Throwable ex) {
-                    DefaultLoader.getUIHelper().showException("Error retrieving service list", ex);
+                    DefaultLoader.getUIHelper().showException("An error occurred while attempting to retrieve service list.", ex,
+                            "Microsoft Cloud Services For Android - Error Retrieving Services", false, true);
                     mobileServiceList.clear();
 
                     while (messageTableModel.getRowCount() > 0) {

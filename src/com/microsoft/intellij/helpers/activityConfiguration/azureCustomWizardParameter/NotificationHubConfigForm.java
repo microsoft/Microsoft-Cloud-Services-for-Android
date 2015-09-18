@@ -142,7 +142,9 @@ public class NotificationHubConfigForm extends DialogWrapper {
                 try {
                     scrh.addNotificationHubsLibs(module);
                 } catch (Throwable throwable) {
-                    DefaultLoader.getUIHelper().showException("Error downloading Notification Hubs library", throwable);
+                    DefaultLoader.getUIHelper().showException("An error occurred while attempting to download " +
+                                    "Notification Hubs library", throwable,
+                            "Microsoft Cloud Services For Android - Error Downloading NH Library", false, true);
                 }
             }
         });

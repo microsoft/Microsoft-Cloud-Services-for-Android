@@ -260,13 +260,16 @@ public class Office365ConfigForm extends DialogWrapper {
                     ApplicationManager.getApplication().invokeAndWait(new Runnable() {
                         @Override
                         public void run() {
-                            DefaultLoader.getUIHelper().showException("An error occurred while fetching the list of applications.", throwable);
+                            DefaultLoader.getUIHelper().showException("An error occurred while attempting to fetch the " +
+                                            "list of applications.", throwable,
+                                    "Microsoft Cloud Services For Android - Error Fetching Applications", false, true);
                         }
                     }, ModalityState.any());
                 }
             });
         } catch (Throwable throwable) {
-            DefaultLoader.getUIHelper().showException("An error occurred while trying to authenticate with Office 365", throwable);
+            DefaultLoader.getUIHelper().showException("An error occurred while attempting to authenticate with Office 365.", throwable,
+                    "Microsoft Cloud Services For Android - Error Authenticating O365", false, true);
         }
     }
 
@@ -313,7 +316,9 @@ public class Office365ConfigForm extends DialogWrapper {
 
             @Override
             public void onFailure(Throwable throwable) {
-                DefaultLoader.getUIHelper().showException("An error occurred while fetching permissions for Office 365 services.", throwable);
+                DefaultLoader.getUIHelper().showException("An error occurred while attempting to fetch permissions for " +
+                                "Office 365 services.", throwable,
+                        "Microsoft Cloud Services For Android - Error Fetching Permissions", false, true);
             }
         });
     }

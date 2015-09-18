@@ -39,7 +39,7 @@
                 </constraints>
                 <properties>
                   <font/>
-                  <icon value="com/microsoftopentechnologies/intellij/icons/add.png"/>
+                  <icon value="com/microsoft/intellij/icons/add.png"/>
                   <text value=""/>
                   <toolTipText value="Add a new app"/>
                   <verticalAlignment value="1"/>
@@ -52,7 +52,7 @@
                   <forms/>
                 </constraints>
                 <properties>
-                  <icon value="com/microsoftopentechnologies/intellij/icons/logout.png"/>
+                  <icon value="com/microsoft/intellij/icons/settings.png"/>
                   <text value=""/>
                   <toolTipText value="Sign out"/>
                 </properties>

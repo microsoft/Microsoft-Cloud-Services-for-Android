@@ -25,7 +25,7 @@
               <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <icon value="com/microsoftopentechnologies/intellij/icons/settings.png"/>
+              <icon value="com/microsoft/intellij/icons/settings.png"/>
               <text value=""/>
               <verticalAlignment value="1"/>
             </properties>
@@ -36,7 +36,7 @@
             </constraints>
             <properties>
               <font/>
-              <icon value="com/microsoftopentechnologies/intellij/icons/add.png"/>
+              <icon value="com/microsoft/intellij/icons/add.png"/>
               <text value=""/>
               <verticalAlignment value="1"/>
               <verticalTextPosition value="0"/>

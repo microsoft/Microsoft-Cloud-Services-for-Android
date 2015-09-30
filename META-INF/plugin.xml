@@ -22,6 +22,8 @@
   -->
   <depends optional="true">org.jetbrains.android</depends>
   <depends>com.microsoft.tooling.msservices.intellij.azure-services-explorer</depends>
+  <depends>com.intellij.modules.java</depends>
+  <depends>com.intellij.modules.lang</depends>
 
   <extensions defaultExtensionNs="org.jetbrains.android">
     <wizardParameterFactory implementation="com.microsoft.intellij.helpers.activityConfiguration.azureCustomWizardParameter.AzureWizardParameterFactory"/>
